@@ -7,7 +7,7 @@ import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ShapeMode;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import org.strongback.Strongback;
 
 public class Robot extends IterativeRobot {
 	
@@ -66,7 +66,16 @@ public class Robot extends IterativeRobot {
     private int wedgeArmMax;
 
     private double correctionNumber = .2;
-	
+
+    /**
+     * Pre-Driver initialization
+     */
+    @Override
+    public void teleopInit() {
+        // Start Strongback functions ...
+        Strongback.start();
+    }
+
     public void robotInit() {
 		talonSRX_FL = new CANTalon(TALON_FRONT_LEFT_CAN_ID);
 		talonSRX_BL = new CANTalon(TALON_BACK_LEFT_CAN_ID);
@@ -286,6 +295,15 @@ public class Robot extends IterativeRobot {
         Timer.delay(0.005);
     }
     ////Stop CameraController////
+
+    /**
+     * After the robot is disabled, flush and unload things from the Strongback framework
+     */
+    @Override
+    public void disabledInit() {
+        // Tell Strongback that the robot is disabled so it can flush and kill commands.
+        Strongback.disable();
+    }
 }
 ////END Robot class////
 
